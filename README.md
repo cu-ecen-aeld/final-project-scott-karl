@@ -1,2 +1,3 @@
-# Scott Karl's Final Project for class ECEA5307 `Linux Embedded System Topics and Projects`
-TBD
+# Scott Karl's ECEA5307 Final Project
+
+[Project Overview Wiki page](https://github.com/cu-ecen-aeld/final-project-scott-karl/wiki).
