@@ -1,19 +1,12 @@
 #!/bin/bash
-# Script to build image for Raspberry Pi 5 or Raspberry Pi 4 (for QEMU testing).
+# Script to build image for Raspberry Pi 5 hardware.
 # Author: Siddhant Jajoo and modified by Scott Karl.
 
 # Usage: ./build.sh               (builds for raspberrypi5 in build-rpi5/)
-#        ./build.sh qemu          (builds for raspberrypi4 in build-rpi4/ - QEMU compatible)
 
-if [ "$1" == "qemu" ]; then
-    MACHINE_TYPE="raspberrypi4"
-    BUILD_DIR="build-rpi4"
-    echo "Building for QEMU testing with raspberrypi4 in ${BUILD_DIR}/"
-else
-    MACHINE_TYPE="raspberrypi5"
-    BUILD_DIR="build-rpi5"
-    echo "Building for real hardware with raspberrypi5 in ${BUILD_DIR}/"
-fi
+MACHINE_TYPE="raspberrypi5"
+BUILD_DIR="build-rpi5"
+echo "Building for Raspberry Pi 5 hardware in ${BUILD_DIR}/"
 
 git submodule init
 git submodule sync
@@ -40,6 +33,19 @@ else
 	else
 		echo "${CONFLINE} already exists in the local.conf file"
 	fi
+fi
+
+# Accept required firmware licenses for Raspberry Pi
+if ! grep -q "^LICENSE_FLAGS_ACCEPTED" conf/local.conf; then
+	echo "Adding LICENSE_FLAGS_ACCEPTED for Raspberry Pi firmware"
+	echo 'LICENSE_FLAGS_ACCEPTED = "synaptics-killswitch"' >> conf/local.conf
+fi
+
+# Enable I2C
+if ! grep -q "^ENABLE_I2C" conf/local.conf; then
+	echo "Enabling I2C"
+	echo 'ENABLE_I2C = "1"' >> conf/local.conf
+	echo 'KERNEL_MODULE_AUTOLOAD += "i2c-dev"' >> conf/local.conf
 fi
 
 # Add meta-raspberrypi layer

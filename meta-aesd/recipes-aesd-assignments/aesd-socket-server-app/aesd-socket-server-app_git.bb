@@ -3,7 +3,8 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 # Source repository containing the socket server application code
-SRC_URI = "git://git@github.com/cu-ecen-aeld/assignments-3-and-later-skarl1192.git;protocol=ssh;branch=main"
+SRC_URI = "git://git@github.com/cu-ecen-aeld/assignments-3-and-later-skarl1192.git;protocol=ssh;branch=main \
+           file://sockettest.sh"
 
 # Package version based on git and specific commit hash to build from
 PV = "1.0+git${SRCPV}"
@@ -13,10 +14,14 @@ SRCREV = "218811e8e0882755fac91f436e5e014b9dc9bebc"
 S = "${WORKDIR}/git/server"
 
 # Specify that the aesdsocket binary will be installed to /usr/bin in the final image
-FILES:${PN} += "${bindir}/aesdsocket"
+FILES:${PN} += "${bindir}/aesdsocket \
+                ${bindir}/sockettest.sh"
 
 # Link with pthread and real-time libraries required by the socket server application
 TARGET_LDFLAGS += "-pthread -lrt"
+
+# sockettest.sh uses bash
+RDEPENDS:${PN} += "bash"
 
 # Inherit update-rc.d class to handle init script installation and configuration
 inherit update-rc.d
@@ -68,6 +73,9 @@ do_install () {
     # Result: The aesdsocket binary is copied to /usr/bin/ with executable permissions in the final image
     install -m 0755 ${S}/aesdsocket ${D}${bindir}/
     
+    # Install the test scripts
+    install -m 0755 ${WORKDIR}/sockettest.sh ${D}${bindir}/
+
     # Install the init script
     # ${sysconfdir} typically expands to /etc
     install -d ${D}${sysconfdir}/init.d

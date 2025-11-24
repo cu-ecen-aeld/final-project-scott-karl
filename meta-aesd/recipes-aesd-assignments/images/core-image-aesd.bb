@@ -1,7 +1,9 @@
 inherit core-image
 CORE_IMAGE_EXTRA_INSTALL += "aesd-socket-server-app"
 CORE_IMAGE_EXTRA_INSTALL += "aesd-char-driver"
+CORE_IMAGE_EXTRA_INSTALL += "aesd-test"
 CORE_IMAGE_EXTRA_INSTALL += "openssh"
+CORE_IMAGE_EXTRA_INSTALL += "i2c-tools"
 inherit extrausers
 # See https://docs.yoctoproject.org/singleindex.html#extrausers-bbclass
 # We set a default password of root to match our busybox instance setup

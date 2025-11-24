@@ -6,13 +6,14 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 # Source repository and init script for this driver
 SRC_URI = "git://git@github.com/cu-ecen-aeld/assignments-3-and-later-skarl1192.git;protocol=ssh;branch=main \
            file://aesdchar-init \
+           file://drivertest.sh \
            "
 
 # Package version based on git and specific commit hash to build from
 PV = "1.0+git${SRCPV}"
-SRCREV = "218811e8e0882755fac91f436e5e014b9dc9bebc"
+SRCREV = "8b946e470d7c37134ba8154fb666c86509c01b17"
 
-# Build from the aesd-char-driver directory where the kernel module source code is located
+# Source directory. Build from the aesd-char-driver directory where the kernel module source code is located
 S = "${WORKDIR}/git/aesd-char-driver"
 
 # Inherit module class for kernel module building and update-rc.d for init script installation
@@ -28,7 +29,7 @@ EXTRA_OEMAKE += "KERNELDIR=${STAGING_KERNEL_DIR}"
 
 # Include the init script and module load/unload helper scripts in the final package
 FILES:${PN} += "${sysconfdir}/init.d/aesdchar-init"
-FILES:${PN} += "${bindir}/aesdchar_load ${bindir}/aesdchar_unload"
+FILES:${PN} += "${bindir}/aesdchar_load ${bindir}/aesdchar_unload ${bindir}/drivertest.sh"
 
 do_install:append () {
 	# Create /etc/init.d directory and install init script
@@ -39,4 +40,5 @@ do_install:append () {
 	install -d ${D}${bindir}
 	install -m 0755 ${S}/aesdchar_load ${D}${bindir}/
 	install -m 0755 ${S}/aesdchar_unload ${D}${bindir}/
+	install -m 0755 ${WORKDIR}/drivertest.sh ${D}${bindir}/
 }
