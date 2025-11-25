@@ -10,26 +10,24 @@ else
 fi
 
 echo "Running drivertest.sh"
-if [ -f /usr/bin/drivertest.sh ]; then
-    /usr/bin/drivertest.sh
+if [ -f /usr/bin/aesdchar-test.sh ]; then
+    /usr/bin/aesdchar-test.sh
     if [ $? -ne 0 ]; then
-        echo "FAIL: drivertest.sh failed"
+        echo "FAIL: aesdchar-test.sh failed"
         exit 1
     fi
 else
-    echo "FAIL: drivertest.sh not found"
+    echo "FAIL: aesdchar-test.sh not found"
     exit 1
 fi
 
 # Clean up before sockettest
-if [ "$1" = "clean" ]; then
-    echo "Restarting aesdsocket and reloading driver to clear buffer"
-    /etc/init.d/aesdsocket-start-stop stop
-    /usr/bin/aesdchar_unload
-    /usr/bin/aesdchar_load
-    /etc/init.d/aesdsocket-start-stop start
-    sleep 1 # Give it a moment to start
-fi
+echo "Restarting aesdsocket and reloading driver to clear buffer"
+/etc/init.d/aesdsocket-start-stop stop
+/usr/bin/aesdchar_unload
+/usr/bin/aesdchar_load
+/etc/init.d/aesdsocket-start-stop start
+sleep 1 # Give it a moment to start
 
 echo "Checking aesdsocket"
 if ps | grep -v grep | grep -q /usr/bin/aesdsocket; then
@@ -40,14 +38,14 @@ else
 fi
 
 echo "Running sockettest.sh"
-if [ -f /usr/bin/sockettest.sh ]; then
-    /usr/bin/sockettest.sh
+if [ -f /usr/bin/aesdsocket-test.sh ]; then
+    /usr/bin/aesdsocket-test.sh
     if [ $? -ne 0 ]; then
-        echo "FAIL: sockettest.sh failed"
+        echo "FAIL: aesdsocket-test.sh failed"
         exit 1
     fi
 else
-    echo "FAIL: sockettest.sh not found"
+    echo "FAIL: aesdsocket-test.sh not found"
     exit 1
 fi
 

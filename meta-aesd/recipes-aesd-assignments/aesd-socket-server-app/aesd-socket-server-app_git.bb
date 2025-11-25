@@ -2,20 +2,21 @@
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-# Source repository containing the socket server application code
+# Remote repository
 SRC_URI = "git://git@github.com/cu-ecen-aeld/assignments-3-and-later-skarl1192.git;protocol=ssh;branch=main \
-           file://sockettest.sh"
+           file://aesdsocket-test.sh"
 
 # Package version based on git and specific commit hash to build from
 PV = "1.0+git${SRCPV}"
-SRCREV = "218811e8e0882755fac91f436e5e014b9dc9bebc"
+SRCREV = "${AUTOREV}"
 
 # Build from the server directory in the git repository where aesdsocket source code is located
 S = "${WORKDIR}/git/server"
 
 # Specify that the aesdsocket binary will be installed to /usr/bin in the final image
 FILES:${PN} += "${bindir}/aesdsocket \
-                ${bindir}/sockettest.sh"
+                ${bindir}/aesdsocket-test.sh \
+                ${sysconfdir}/init.d/aesdsocket-start-stop"
 
 # Link with pthread and real-time libraries required by the socket server application
 TARGET_LDFLAGS += "-pthread -lrt"
@@ -34,8 +35,8 @@ INITSCRIPT_NAME = "aesdsocket-start-stop"
 INITSCRIPT_PARAMS = "defaults 99"
 
 do_configure () {
-	# No configuration needed, using default Makefile as-is
-	:
+	# Copy local test script to source directory to overwrite git file
+	cp ${WORKDIR}/aesdsocket-test.sh ${S}/
 }
 
 do_compile () {
@@ -74,7 +75,7 @@ do_install () {
     install -m 0755 ${S}/aesdsocket ${D}${bindir}/
     
     # Install the test scripts
-    install -m 0755 ${WORKDIR}/sockettest.sh ${D}${bindir}/
+    install -m 0755 ${S}/aesdsocket-test.sh ${D}${bindir}/
 
     # Install the init script
     # ${sysconfdir} typically expands to /etc
