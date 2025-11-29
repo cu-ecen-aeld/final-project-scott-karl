@@ -78,14 +78,17 @@ if [ "$1" = "local" ]; then
     # Clean up previous devtool state
     devtool reset aesd-char-driver 2>/dev/null || true
     devtool reset aesd-socket-server-app 2>/dev/null || true
+    devtool reset aesd-i2c-lcd-driver 2>/dev/null || true
     
     # Modify with -n (no-extract) and the specific path
     devtool modify -n aesd-char-driver "$LOCAL_SOURCE_DIR"
     devtool modify -n aesd-socket-server-app "$LOCAL_SOURCE_DIR"
+    devtool modify -n aesd-i2c-lcd-driver "$LOCAL_SOURCE_DIR"
 else
     echo "Configuring for standard build (remote sources)..."
     devtool reset aesd-char-driver 2>/dev/null || true
     devtool reset aesd-socket-server-app 2>/dev/null || true
+    devtool reset aesd-i2c-lcd-driver 2>/dev/null || true
 fi
 
 set -e
