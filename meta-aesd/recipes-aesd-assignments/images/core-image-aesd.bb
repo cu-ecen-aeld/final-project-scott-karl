@@ -1,6 +1,7 @@
 inherit core-image
 CORE_IMAGE_EXTRA_INSTALL += "aesd-socket-server-app"
 CORE_IMAGE_EXTRA_INSTALL += "aesd-char-driver"
+CORE_IMAGE_EXTRA_INSTALL += "aesd-i2c-lcd-driver"
 CORE_IMAGE_EXTRA_INSTALL += "aesd-test"
 CORE_IMAGE_EXTRA_INSTALL += "openssh"
 CORE_IMAGE_EXTRA_INSTALL += "i2c-tools"

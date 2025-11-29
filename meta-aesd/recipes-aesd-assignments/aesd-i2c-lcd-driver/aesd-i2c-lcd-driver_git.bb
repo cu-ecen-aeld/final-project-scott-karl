@@ -3,7 +3,8 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 # 1. Source Configuration
-SRC_URI = "git://git@github.com/cu-ecen-aeld/assignments-3-and-later-skarl1192.git;protocol=ssh;branch=main"
+SRC_URI = "git://git@github.com/cu-ecen-aeld/assignments-3-and-later-skarl1192.git;protocol=ssh;branch=main \
+           file://aesdlcd-test.sh"
 PV = "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 # Source directory configuration
@@ -32,6 +33,8 @@ EXTRA_OEMAKE += "KERNELDIR=${STAGING_KERNEL_DIR}"
 FILES:${PN} += "${sysconfdir}/init.d/aesdlcd-start-stop.sh"
 FILES:${PN} += "${bindir}/aesdlcd_load.sh"
 FILES:${PN} += "${bindir}/aesdlcd_unload.sh"
+FILES:${PN} += "${bindir}/aesdlcd-test.sh"
+FILES:${PN} += "${bindir}/aesdlcd-health-check.sh"
 FILES:${PN} += "/boot/overlays/aesd-lcd-overlay.dtbo"
 
 do_install:append () {
@@ -43,6 +46,8 @@ do_install:append () {
     install -d ${D}${bindir}
     install -m 0755 ${S}/aesd_lcd_load ${D}${bindir}/aesdlcd_load.sh
     install -m 0755 ${S}/aesd_lcd_unload ${D}${bindir}/aesdlcd_unload.sh
+    install -m 0755 ${WORKDIR}/aesdlcd-test.sh ${D}${bindir}/
+    install -m 0755 ${WORKDIR}/aesdlcd-health-check.sh ${D}${bindir}/
 
     # C. Compile and Install Overlay
     dtc -O dtb -o ${S}/aesd-lcd-overlay.dtbo -b 0 -@ ${S}/aesd-lcd-overlay.dts
