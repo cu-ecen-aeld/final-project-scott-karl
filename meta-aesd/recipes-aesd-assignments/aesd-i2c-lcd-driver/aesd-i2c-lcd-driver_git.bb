@@ -34,7 +34,6 @@ FILES:${PN} += "${sysconfdir}/init.d/aesdlcd-start-stop.sh"
 FILES:${PN} += "${bindir}/aesdlcd_load.sh"
 FILES:${PN} += "${bindir}/aesdlcd_unload.sh"
 FILES:${PN} += "${bindir}/aesdlcd-test.sh"
-FILES:${PN} += "${bindir}/aesdlcd-health-check.sh"
 FILES:${PN} += "/boot/overlays/aesd-lcd-overlay.dtbo"
 
 do_install:append () {
@@ -47,7 +46,6 @@ do_install:append () {
     install -m 0755 ${S}/aesd_lcd_load ${D}${bindir}/aesdlcd_load.sh
     install -m 0755 ${S}/aesd_lcd_unload ${D}${bindir}/aesdlcd_unload.sh
     install -m 0755 ${WORKDIR}/aesdlcd-test.sh ${D}${bindir}/
-    install -m 0755 ${WORKDIR}/aesdlcd-health-check.sh ${D}${bindir}/
 
     # C. Compile and Install Overlay
     dtc -O dtb -o ${S}/aesd-lcd-overlay.dtbo -b 0 -@ ${S}/aesd-lcd-overlay.dts
